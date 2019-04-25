@@ -18,7 +18,26 @@ ng serve -o
 
 The Materialize CSS framework is already installed in this project and ready to use. You can easily apply styling by using the documentation: https://materializecss.com/navbar.html
 
-## Part I: Testing Components
+## Part I: TDD in Angular
+
+Let's split up into groups of 3 to research some aspects of angular testing. The topics:
+
+1. [Testing components](https://angular.io/guide/testing#component-test-basics)
+2. [Testing services](https://angular.io/guide/testing#service-tests)
+3. [Testing routes](https://angular.io/guide/testing#testing)
+4. [Testing forms](https://angular.io/guide/testing#testing)
+5. [Testing classes/models](https://angular.io/guide/testing#testing)
+6. [Testing templates/DOM](https://angular.io/guide/testing#testing)
+7. [Testing utilities](https://angular.io/guide/testing#testing-utility-apis)
+
+Each group should research the following:
+
+- a description of how to test given feature
+- any additional setup required to begin testing
+- a short list of test common assertions and matchers for that feature
+
+
+## Part II: Testing Components
 
 Since Angular provides us with matching tests for every module we create, we'll start by first updating the tests for `AppModule`.
 
@@ -122,7 +141,7 @@ How much code is needed to make this test pass? Make an attempt before viewing t
 </details>
 
 
-## Part 2: Testing Forms
+## Part III: Testing Forms
 
 If you've got a good handle on testing components, testing forms is pretty straight forward. Let's make a search form component and test it.
 
