@@ -205,33 +205,39 @@ Finally, we need to set the value of the form to be an actual form. Try using th
 Then use TDD to complete the remaining tests for the Search requirements above.
 
 
-
 ## Part IV: Hero Book, GO!
 
 Your task is to use TDD to develop the remaining features for this app. Below are some stories to get you started, but you're not limited to the components, services and models listed below. Use all of your knowledge of Angular to meet the requirements.
 
 You'll find json data files in the `srce/app/data` folder. Use it to help you understand the shape of the data and the different objects your app will eventually use and to develop stronger tests.
 
+*Hero Book API*
+http://herobookapi.herokuapp.com/api/v1/heroes/
+
+Use this api to CRUD data for your apps. No authentication required for this exercise so you can freely access and update the data here. 
+
+*ONLY DELETE HEROES YOU CREATE* Everyone can see the changes to the heroes!
+
+
 ### Requirements
 
 **Homepage**
-- has navigation
+- has navigation (routes)
 - has search bar
 - has a list of heroes
 
 **Users**
-- can register
-- can login
-- can have a favorites list
-- can add favorites to their list
+- can register (localStorage)
+- can login (localStorage)
+- STRETCH GOAL: can have a favorites list
+- STRETCH GOAL: can add favorites to their list
 
 **Heroes**
 - have unique page
 - have stats displayed on their page
-- have an image
+- have an image on their page
+- is full CRUD
 
 **Search**
 - can search for heroes by name
-- has filters to search by: powers, species, and gender
-
-> TODO: Add link to Hero Book API!
+- STRETCH GOAL: has filters to search by: powers, species, and gender
