@@ -1,10 +1,27 @@
 # Hero Book
+> Blocks: 1-4
 
 Hero Book is an application that allows users to read about their favorite super heroes. It's got some nifty features:
 
 * Search functionality with filters
 * User registration
 * Favorites
+
+### Instructors ...
+
+This guide starts with a long walk through. Feel free to skip straight to the exercise at the bottom if students are already comfortable with how to create tests.
+
+This exercise is very flexible for intermediate to advanced lesson planning. It can be broken up into 1-4 blocks, with an all-day lab requiring completion of the entire app.
+ 
+ Stretch goals can be easily added and ideas adapted. The exercise is focused around the following concepts:
+
+* TDD
+* Services (CRUDing)
+* Observables (HTTP, forms)
+* And the basics (components, directives)
+
+> TODO: Solution branches for the adjustable lesson planning (intermediate, and advanced)
+
 
 ## Setup
 It's recommended to install Augury for your Chrome dev tools. It's a good tool for inspecting Angular components within the browser. It can also be useful to yield insights and understanding about how your application works. It is not required, but it's very helpful.
@@ -37,12 +54,9 @@ Each group should research the following:
 - a short list of test common assertions and matchers for that feature
 
 **Important Terms**
-- `TestBed`
-- fixture
-
-## Part II: Testing Components
-
-Since Angular provides us with matching tests for every module we create, we'll start by first updating the tests for `AppModule`.
+- `TestBed`: the test application environment
+- `fixture`: a component
+- Mock: a substitute for an object
 
 Here are some common testing objects and matchers:
 
@@ -52,56 +66,49 @@ Here are some common testing objects and matchers:
 - Update component with data: `fixture.detectChanges`
 - Get the main component HTML element: `fixture.nativeElement`
 
-**Matchers**
-
-### Step 1: Update `AppModule` Tests
-
-Open the modules component and template files. Then run the tests. They should all pass. The overall layout of the test file should look familiar:
-
-- `describe` block describes the test **suite**
-- `it` blocks describe each individual test
-- `expect` provides the test assertions 
-- **matchers** like `toEqual`
-
-One unfamiliar thing you may have noticed is the `TestBed`. This configures a test version of the application environment. Notice how it uses the same kind of configuration object we find in `app.module.ts`.
+**Common Matchers**
+- `expect(actual).toEqual(expected)`
+- `expect(actual).toContain(expected)`
+- `expect(actual).toBeTruthy()`
+- `expect(actual).toBe(expected)`
 
 For every component you test, it's dependencies should be added to declarations of the `TestBed`.
 
-However, it's not strictly  necessary to use the `TestBed` to test components in isolation. Let's take a look at some examples below.
+
+## Part II: Testing Components
+
+Throughout, our approach to testing follows these 3 steps:
+
+1. Read the requirements. They describe what's to be tested.
+2. Create the test case.
+3. Add a simple assertion first.
+
+After you've completed these steps, begin SEAT (setup, exercise, assert, tear down). 
+
+Since Angular provides us with matching tests for every module we create, we'll start by first updating the tests for `AppComponent`.
 
 
-### Step 2: Add a new `HomeComponent`
+### Add a new `NavComponent`
 
-Create a new component named home and open the tests and template for it. Add the new home selector app.component.html. Let's try to create tests for the following:
+Create a new component named 'nav' and open the tests and template for it. Here are the test requirements for NavComponent: 
 
-1. Successfully creates the 'Home' component
-2. Displays <nav> with with 'Hero Book' in it.
-3. Update `app.component.spec.ts`: It now renders the home component
+1. Successfully creates the 'Nav' component
+2. Displays <nav> with 'Hero Book' logo on it.
 
-Before writing any code, re-run the tests. The `AppComponent` tests should start failing with this error:
-
-```
-'app-home' is not a known element:
-  1. If 'app-home' is an Angular component, then verify that it is part of this module.
-	2. If 'app-home' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message. ("<div class="container">
-```
-
-This component has a new dependency. If you declare `HomeComponent` in the `TestBed`, the tests should pass again.
-
-First, let's examine the 'should create' test. The working example uses the `TestBed` to create a component instance. However, this tests the `HomeComponent` in isolation. The test could also be written as follows:
+First, let's examine the 'should create' test. The working example uses the `TestBed` to create a component instance. However, we can also test the `NavComponent` in isolation. Change the test to look like this:
 
 ```typescript
   it('should create', () => {
-    const instance = new HomeComponent();
+    const instance = new NavComponent();
     expect(instance).toBeTruthy();
   });
 ```
 
 The test should still pass. So here we can see that unit testing a single component in isolation can be done by just using the component itself, with little test setup.
 
-Use the `TestBed` when you need to test within the application environment such as when testing the component with its matching template.
+Most tests will work fine using the `fixture` and `component` variables we've already setup for the suite. But try to be aware of when you should test things in isolation.
 
-Now add a test in `home.component.spec.ts` for the nav as described in #2 and make it fail. In this example, I've decided I'll have a nav bar in this component and it will contain a link named 'Hero Book' to the the homepage.
+Now add a test in `nav.component.spec.ts` for the next requirement and make it fail. In this example, I've decided I'll have a nav bar in this component and it will contain a link named 'Hero Book' to the the homepage.
 
 ```typescript
   it('should have nav logo', () => {
@@ -115,60 +122,138 @@ We can make this test pass with the following code:
 
 <details>
 <summary>Click to view solution</summary>
-```
+
+```html
 <nav><a href="/" class="brand-logo">Hero Book</a></nav>
 ```
+
 </details>
 
-The homepage should also have a search bar. Add a test for the search bar:
+Take a moment to understand how this works before moving onto the next part.
+
+
+### Integration Testing the NavComponent with AppComponent
+
+Add the new nav selector to app.component.html. Let's try to create tests for the following:
+
+1. Successfully loads `NavComponent`
+
+Before writing any code, re-run the tests. The `AppComponent` tests should start failing with this error:
+
+```
+'app-nav' is not a known element:
+  1. If 'app-nav' is an Angular component, then verify that it is part of this module.
+	2. If 'app-nav' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message. ("<div class="container">
+```
+
+This component has a new dependency. If you declare `NavComponent` in the `TestBed`, the tests should pass again.
+
+Whenever you're testing components that contain other components, you'll need to configure the `TestBed` to import them. Otherwise, you'll get errors when the test app tries to load the components.
+
+
+### Step 1: Testing the Search Bar
+
+Requirements for the AppComponent:
+
+**Homepage (AppComponent)**
+- has navigation (routes)
+- has search bar
+- has a list of heroes 
+
+Start with our 3-step test setup:
+
 ```typescript
   it('should have a search bar with placeholder text', () => {
-    fixture = TestBed.createComponent(HomeComponent);
+    // Setup
+    
+    // Exercise
+    
+    // Assert
+    expect(el.querySelector('input').placeholder).toEqual('Search');
+    
+    // Teardown (as needed)
+  });
+```
+
+By writing the assertion first, its clear to see what you need to do to set this up: 
+
+1. You'll need to access the component's elements.
+2. You'll need an instance of the component.
+
+In the setup, create an instance of the `AppComponent`. Then use the `nativeElement` property of the instance to get the components HTML.
+
+Finally, use the DOM API to query the right selector for the test.
+
+```typescript
+  it('should have a search bar with placeholder text', () => {
+    // Setup
+    fixture = TestBed.createComponent(AppComponent);
+    // Exercise
     const el = fixture.nativeElement;
+    // Assert
     expect(el.querySelector('input').placeholder).toEqual('Search');
   });
 ```
 
 How much code is needed to make this test pass? Make an attempt before viewing the answer below!
+
+The test should fail, and then you can begin writing the code to make it pass.
+
 <details>
 <summary>Click to view solution</summary>
-<code>
+
+```html
   <form>
     <input type="text" placeholder="Search">
   </form>
-</code>
+```
+
 </details>
 
 
-## Part III: Testing Forms
+## Step 2: Creating the SearchForm Component
 
-If you've got a good handle on testing components, testing forms is pretty straight forward. Let's make a search form component and test it.
+Create the search form component.
 
-Once created, open `search-form.component.ts` and the matching spec file. Run the tests. 
+If you've got a good handle on creating forms within components and templates,, then testing them will feel a little familiar. The same code you usually use to access the form and check its validity works just as well in tests.
 
-Before writing tests, always review the requirements. If there aren't any, create stories to help you understand what your code will do. Here's how we might describe the requirements for a search form.
+Once the new component is created, open `search-form.component.ts` and the matching spec file. Run the tests. 
+
+Before writing new tests, always review the requirements. In this case, there aren't very many requirements so you'll need to create them. So how might you approach creating your own requirements?
+
+Think about what you want the search for to do. From the user's perspective, they should be able to visit Hero Book, type a hero's name into a search box, and view the results.
+
+But as a developer, there are certain features of a search form you want to make sure are included. So here's how we might describe the requirements for a search form.
 
 ``` 
 Search Form Component
 - should have a search form
-- should require query to submit form
-- should validate form
+- should require an input field for user queries (*)
+- should validate user's form input (*)
 - should return search results
-- should return message if there are no results
+- should display a message if there are no results
 ```
+> *: These two requirements could translate into 1-2 tests based on whether the form is implemented using Template-Driven vs. Dynamic forms.
 
-Now implement 3 tests. Go ahead and write the outlines of each tests by starting the `it` function and adding the descriptions you see in the requirements. Start with the first:
+Go ahead and write the outlines of each test case using the requirements above. 
+
+Then try to add the assertions you think you'll make to make the test green.
+
+One test case at a time.
+
+<details>
+<summary>Click to see examples of the base test cases</summary>
 
 ```typescript
 it('should have a search form', () => {
   
 });
 
-xit('should require query to submit form', () => {
+xit('should require input field for users query', () => {
   
 });
 
-xit('should validate form', () => {
+xit('should validate users form input', () => {
   
 });
 
@@ -176,36 +261,50 @@ xit('should return search results', () => {
   
 });
 
-xit('should show message if no results found', () => {
+xit('should display a message if no results found', () => {
   
 });
 ```
 
-> NOTE: To skip tests, simply add an 'x' to the beginning of the test as you see here. Remove the x to run the tests. Running empty tests will otherwise return a successful test run, which isn't helpful.
+</details>
 
-Let's add some code to test the first one. The requirement asks us to make sure that the component has a form. All we have to do is create an instance of the component and check that it has a property whose value is a form.
+> NOTE: To skip tests, simply add an 'x' to the beginning of the test case as you see here. Remove the x to run the tests. Running empty tests will otherwise return a successful test run, which isn't helpful.
+
+Let's add some code to test the first requirement. It says to make sure that the component has a form. So add an assertion which says exactly that: `expect(searchForm).toBeTruthy()`.
+
+Now that we see what's being tested, it's a little easier to know what you need to do next:
+
+1. Create an instance of the component.
+2. Get the search form HTML from the component.
+
+That will take care of the setup and exercise steps. Once you've finished, re-run the tests. It should pass.
 
 ```typescript
 it('should have search form', () => {
   // Setup: create an instance of the component
-  const sfc = new SearchFormComponent();
+  const sfc = fixture.nativeElement;
   // Exercise: get the value of the form property
-  const searchForm = sfc.form;
+  const searchForm = sfc.querySelector('form');
   // Assert: test that the property isn't null or undefined
-  expect(searchForm).toBeTruthy();
+  expect(searchForm).toBeTruthy()
 });
 ```
 
-Run the test. 
+So far, we're using a Template Driven form. Remember, least amount of code possible to make the test green!
 
-To make this pass, we need to create a form property so add it and run the tests again. It should fail again.
+### Step 3: Complete the remaining tests
 
-Finally, we need to set the value of the form to be an actual form. Try using the `FormBuilder` to make the first test pass. Remember, least amount of code possible.
+We've covered:
 
-Then use TDD to complete the remaining tests for the Search requirements above.
+1. Angular testing syntax and setup
+2. Common Angular testing objects (TestBed, matchers, components)
+3. How to define your own requirements
+4. Applying SEAT to testing components
+
+Use this new knowledge to complete the remaining tests for the `SearchFormComponent`.
 
 
-## Part IV: Hero Book, GO!
+## Hero Book, GO!
 
 Your task is to use TDD to develop the remaining features for this app. Below are some stories to get you started, but you're not limited to the components, services and models listed below. Use all of your knowledge of Angular to meet the requirements.
 
@@ -221,10 +320,16 @@ Use this api to CRUD data for your apps. No authentication required for this exe
 
 ### Requirements
 
-**Homepage**
+**Homepage (AppComponent)**
 - has navigation (routes)
 - has search bar
 - has a list of heroes
+
+**Heroes**
+- have unique page
+- have stats displayed on their page
+- have an image on their page
+- has full CRUD
 
 **Users**
 - can register (localStorage)
@@ -232,12 +337,7 @@ Use this api to CRUD data for your apps. No authentication required for this exe
 - STRETCH GOAL: can have a favorites list
 - STRETCH GOAL: can add favorites to their list
 
-**Heroes**
-- have unique page
-- have stats displayed on their page
-- have an image on their page
-- is full CRUD
-
 **Search**
 - can search for heroes by name
+- can view search results
 - STRETCH GOAL: has filters to search by: powers, species, and gender
