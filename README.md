@@ -14,6 +14,9 @@ Additional optional features:
 * User registration
 * User favorites lists
 
+> INSTRUCTORS: See CONTRIBUTE.md for api auth details and exercise recommendations.
+
+
 ## Setup
 It's recommended to install Augury for your Chrome dev tools. It's a good tool for inspecting Angular components within the browser. It can also be useful to yield insights and understanding about how your application works. It is not required, but it's very helpful.
 
@@ -79,18 +82,18 @@ After you've completed these steps, begin SEAT (setup, exercise, assert, tear do
 Since Angular provides us with matching tests for every module we create, we'll start by first updating the tests for `AppComponent`.
 
 
-### Add a new `NavComponent`
+### Add a new `NavbarComponent`
 
-Create a new component named 'nav' and open the tests and template for it. Here are the test requirements for NavComponent: 
+Create a new component named 'navbar' and open the tests and template for it. Here are the test requirements for `NavbarComponent`: 
 
-1. Successfully creates the 'Nav' component
-2. Displays <nav> with 'Hero Book' logo on it.
+1. Successfully creates the 'Navbar' component
+2. Displays navbar with 'Hero Book' logo on it.
 
 First, let's examine the 'should create' test. The working example uses the `TestBed` to create a component instance. However, we can also test the `NavComponent` in isolation. Change the test to look like this:
 
 ```typescript
   it('should create', () => {
-    const instance = new NavComponent();
+    const instance = new NavbarComponent();
     expect(instance).toBeTruthy();
   });
 ```
@@ -99,7 +102,7 @@ The test should still pass. So here we can see that unit testing a single compon
 
 Most tests will work fine using the `fixture` and `component` variables we've already setup for the suite. But try to be aware of when you should test things in isolation.
 
-Now add a test in `nav.component.spec.ts` for the next requirement and make it fail. In this example, I've decided I'll have a nav bar in this component and it will contain a link named 'Hero Book' to the the homepage.
+Now add a test in `navbar.component.spec.ts` for the next requirement and make it fail. In this example, I've decided I'll have a nav bar in this component and it will contain a link named 'Hero Book' to the the homepage.
 
 ```typescript
   it('should have nav logo', () => {
@@ -144,9 +147,7 @@ Whenever you're testing components that contain other components, you'll need to
 
 ### Step 1: Testing the Search Bar
 
-Requirements for the AppComponent:
-
-**Homepage (AppComponent)**
+**Homepage Requirements (AppComponent)**
 - has navigation
 - has search bar with placeholder text 'Search'
 
@@ -307,7 +308,7 @@ You'll find json data files in the `srce/app/data` folder. Use it to help you un
 *Hero Book API*
 http://herobookapi.herokuapp.com/api/v1/heroes/
 
-Use this api to CRUD data for your app. No authentication required. Check with your instructor about open access to make PATCH AND PUT/POST requests. The API has read-access, but could require a key for write-access.
+Use this api to CRUD data for your app. Check with your instructor about access to make PATCH AND PUT/POST requests. The API requires a key for write-access.
 
 
 ### Requirements
