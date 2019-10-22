@@ -37,7 +37,7 @@ describe('NavbarComponent', () => {
     fixture = TestBed.createComponent(NavbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    // FIXME: Known Angular issues: https://github.com/angular/angular/issues/25837
+    // FIXME - Issue #3: Known Angular issues: https://github.com/angular/angular/issues/25837
     router.initialNavigation();
   });
 
